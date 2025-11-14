@@ -1,124 +1,119 @@
 'use strict';
-const userNameInput = document.getElementById('user-name');
+const userNameInput = document.getElementById ('user-name');
 const assessmentButton = document.getElementById('assessment');
 const resultDivision = document.getElementById('result-area');
 const tweetDivision = document.getElementById('tweet-area');
-
-assessmentButton.addEventListener(
+assessmentButton.addEventListener(//イベント検知追加
   'click',
-  () => {
-    const userName = userNameInput.value;
-    if (userName.length === 0) {
-      // 名前が空の時は処理を終了する
+  () => { //アロー関数で無名関数ですイベント検知で実行します
+    const userName = userNameInput.value;//入力欄inputの値取得
+    if (userName.length === 0) {//　文字数が0か確認
+      //名前がからの時は処理を終了する
       return;
     }
+ 
+  //診断結果表示エリアの作成
+  resultDivision.innerText = '';//divタグを空文字で上書きしてからにする
+  const headerDivision = document.createElement('div');//h3タグの作成
+  headerDivision.setAttribute('class','card-header text-bg-primary');
 
-    // 診断結果表示エリアの作成
-    resultDivision.innerText = '';
-    const header = document.createElement('h3');
-    header.innerText = '診断結果';
-    resultDivision.appendChild(header);
-
-    const paragraph = document.createElement('p');
-    const result = assessment(userName);
-    paragraph.innerText = result;
-    resultDivision.appendChild(paragraph);
-
-    // ツイートエリアの作成
-    tweetDivision.innerText = '';
-    const anchor = document.createElement('a');
-    const hrefValue =
-      'https://twitter.com/intent/tweet?button_hashtag=' +
-      encodeURIComponent('あなたのいいところ') +
-      '&ref_src=twsrc%5Etfw';
+  headerDivision.innerText ='診断結果';//診断結果と表示タグの内側のテキストを設定
+//bodyDivisionの作成
+const bodyDivision =document.createElement('div');//divタグ作成
+bodyDivision.setAttribute('class','card-body');//ブートストラップ用のクラス設定
+  const paragraph = document.createElement('p');//pタグの作成paragraph段落
+  const result = assessment(userName);//診断結果を作製
+  paragraph.setAttribute('class','card-text');//クラス設定
+  paragraph.innerText = result;//段落の内側のテキストに結果表示pタグの内側のテキスト設定
+  bodyDivision.appendChild(paragraph);//divタグの子要素としてpタグを追加
+  //リザルトでぃび🅂ジョンにも「ブートストラップスタイル適応
+  resultDivision.setAttribute('class','card');
+      // headerDivision と bodyDivision を resultDivision に差し込む
+      resultDivision.appendChild(headerDivision);
+      resultDivision.appendChild(bodyDivision);
   
-    anchor.setAttribute('href', hrefValue);
-    anchor.setAttribute('class', 'twitter-hashtag-button');
-    anchor.setAttribute('data-text', result);
-    anchor.innerText = 'Tweet #あなたのいいところ';
-  
-    tweetDivision.appendChild(anchor);
+  //ツイートエリアの作成
+     tweetDivision.innerText = '';
+     const anchor = document.createElement('a');
+     const hrefValue = 'https://twitter.com/intent/tweet?button_hashtag='+ encodeURIComponent('あなたのいいところ') + '&ref_src=twsrc%5Etfw';
 
-
-    const script = document.createElement('script');
-    script.setAttribute('src', 'https://platform.twitter.com/widgets.js');
-    tweetDivision.appendChild(script);
+     anchor.setAttribute('href',hrefValue);//属性hrefついか
+     anchor.setAttribute('class','twitter-hashtag-button');
+     anchor.setAttribute('deta-text',result);//診断結果を追加
+     anchor.innerText='Tweet #あなたのいいところを投稿する';
+     tweetDivision.appendChild(anchor);//divの子要素として追加
+     const script =document.createElement('script');//scriptタグの作成
+     script.setAttribute('src','https://platform.twitter.com/widgets.js');//src属性を追加
+    tweetDivision.appendChild(script); //divの子要素としてスクリプトタグを追加
   }
 );
-
-userNameInput.addEventListener(
-  'keydown',
-  event => {
-    if(event.code === 'Enter') {
-      assessmentButton.dispatchEvent(new Event('click'))
+// TODO Enter　キーで診断する処理を追加
+userNameInput.addEventListener(//イベント検知追加
+  'keydown',//キー押される
+  (event) => {
+    if(event.code === 'Enter') {//押されたキーエンターなら
+assessmentButton.dispatchEvent(new Event('click')); //クリックと同じイベント追加
     }
   }
 )
-
-const answers = [
-  '###userName###のいいところは声です。###userName###の特徴的な声は皆を惹きつけ、心に残ります。',
-  '###userName###のいいところはまなざしです。###userName###に見つめられた人は、気になって仕方がないでしょう。',
-  '###userName###のいいところは情熱です。###userName###の情熱に周りの人は感化されます。',
-  '###userName###のいいところは厳しさです。###userName###の厳しさがものごとをいつも成功に導きます。',
-  '###userName###のいいところは知識です。博識な###userName###を多くの人が頼りにしています。',
-  '###userName###のいいところはユニークさです。###userName###だけのその特徴が皆を楽しくさせます。',
-  '###userName###のいいところは用心深さです。###userName###の洞察に、多くの人が助けられます。',
-  '###userName###のいいところは見た目です。内側から溢れ出る###userName###の良さに皆が気を惹かれます。',
-  '###userName###のいいところは決断力です。###userName###がする決断にいつも助けられる人がいます。',
-  '###userName###のいいところは思いやりです。###userName###に気をかけてもらった多くの人が感謝しています。',
-  '###userName###のいいところは感受性です。###userName###が感じたことに皆が共感し、わかりあうことができます。',
-  '###userName###のいいところは節度です。強引すぎない###userName###の考えに皆が感謝しています。',
-  '###userName###のいいところは好奇心です。新しいことに向かっていく###userName###の心構えが多くの人に魅力的に映ります。',
-  '###userName###のいいところは気配りです。###userName###の配慮が多くの人を救っています。',
-  '###userName###のいいところはそのすべてです。ありのままの###userName###自身がいいところなのです。',
-  '###userName###のいいところは自制心です。やばいと思ったときにしっかりと衝動を抑えられる###userName###が皆から評価されています。'
+const answers=[
+ '###userName###のいいところは声です。###userName###の特徴的な声は皆を惹きつけ、心に残ります。',
+ '###userName###のいいところはまなざしです。###userName###に見つめられた人は、気になって仕方がないでしょう。',
+ '###userName###のいいところは情熱です。###userName###の情熱に周りの人は感化されます。',
+ '###userName###のいいところは厳しさです。###userName###の厳しさがものごとをいつも成功に導きます。',
+ '###userName###のいいところは知識です。博識な###userName###を多くの人が頼りにしています。',
+ '###userName###のいいところはユニークさです。###userName###だけのその特徴が皆を楽しくさせます。',
+ '###userName###のいいところは用心深さです。###userName###の洞察に、多くの人が助けられます。',
+ '###userName###のいいところは見た目です。内側から溢れ出る###userName###の良さに皆が気を惹かれます。',
+ '###userName###のいいところは決断力です。###userName###がする決断にいつも助けられる人がいます。',
+ '###userName###のいいところは思いやりです。###userName###に気をかけてもらった多くの人が感謝しています。',
+ '###userName###のいいところは感受性です。###userName###が感じたことに皆が共感し、わかりあうことができます。',
+ '###userName###のいいところは節度です。強引すぎない###userName###の考えに皆が感謝しています。',
+ '###userName###のいいところは好奇心です。新しいことに向かっていく###userName###の心構えが多くの人に魅力的に映ります。',
+ '###userName###のいいところは気配りです。###userName###の配慮が多くの人を救っています。',
+ '###userName###のいいところはそのすべてです。ありのままの###userName###自身がいいところなのです。',
+ '###userName###のいいところは自制心です。やばいと思ったときにしっかりと衝動を抑えられる###userName###が皆から評価されています。'
 ];
-
 /**
- * 名前の文字列を渡すと診断結果を返す関数
- * @param {string} userName ユーザの名前
+ * 名前の文字列を渡すと診断結果を返す変数
+ * @param  {string} userName ユーザの名前
  * @return {string} 診断結果
  */
-function assessment(userName) {
-  // 全文字のコード番号を取得してそれを足し合わせる
+function assessment(userName){
+  //全文字のコード番号を取得してそれを足し合わせる
   let sumOfCharCode = 0;
-  for (let i = 0; i < userName.length; i++) {
+  for (let i = 0; i < userName.length; i++){
     sumOfCharCode = sumOfCharCode + userName.charCodeAt(i);
   }
-
-  // 文字のコード番号の合計を回答の数で割って添字の数値を求める
-  const index = sumOfCharCode % answers.length;
-  let result = answers[index];
-
-  result = result.replaceAll('###userName###', userName);
-  return result;
+  // 文字コード番号の合計を回答の数で割って添え字の数字を求める
+  const index = sumOfCharCode % answers.length;//合計値配列要素数で割ってあまり求めることで配列を要素数の数値の収めることが出来る
+  let result = answers [index];//配列から答えを取得
+  result = result.replaceAll('###userName###',userName)
+  return result;//診断結果返す
 }
-
-// テストを行う関数
-function test() {
-  console.log('診断結果の文章のテスト');
-
-  //太郎
-  console.log('太郎');
+//動作確認
+//テストを行う関数
+function test(){
+  console.log('診断結果の文章テスト')
+  //太郎の場合
+  console.log('太郎')
   console.assert(
-    assessment('太郎') ===
-    '太郎のいいところは決断力です。太郎がする決断にいつも助けられる人がいます。',
+    assessment('太郎')===
+       '太郎のいいところは決断力です。太郎がする決断にいつも助けられる人がいます。',
     '診断結果の文言の特定の部分を名前に置き換える処理が正しくありません。'
   );
-
-  //次郎
-  console.log('次郎');
+  //次郎の場合
+   console.log('次郎')
   console.assert(
-    assessment('次郎') ===
-    '次郎のいいところは自制心です。やばいと思ったときにしっかりと衝動を抑えられる次郎が皆から評価されています。',
+    assessment('次郎')===
+     '次郎のいいところは自制心です。やばいと思ったときにしっかりと衝動を抑えられる次郎が皆から評価されています。',
     '診断結果の文言の特定の部分を名前に置き換える処理が正しくありません。'
   );
-
-  //花子
+   //花子
   console.log('花子');
   console.assert(
     assessment('花子') ===
-    '花子のいいところはまなざしです。花子に見つめられた人は、気になって仕方がないでしょう。',
+      '花子のいいところはまなざしです。花子に見つめられた人は、気になって仕方がないでしょう。',
     '診断結果の文言の特定の部分を名前に置き換える処理が正しくありません。'
   );
 
@@ -130,21 +125,23 @@ function test() {
   console.assert(
     assessment('太郎') === assessment('太郎'),
     '入力が同じ名前なら同じ診断結果を出力する処理が正しくありません。'
-  )
+  );
 
   console.log('次郎');
   console.assert(
     assessment('次郎') === assessment('次郎'),
     '入力が同じ名前なら同じ診断結果を出力する処理が正しくありません。'
-  )
+  );
 
   console.log('花子');
   console.assert(
     assessment('花子') === assessment('花子'),
     '入力が同じ名前なら同じ診断結果を出力する処理が正しくありません。'
-  )
+  );
 
   console.log('同じ名前なら、同じ結果を出力することのテスト終了');
 }
-
 test();
+
+
+
